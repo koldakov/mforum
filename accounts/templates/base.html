@@ -104,6 +104,11 @@
             color: var(--text-muted);
         }
 
+        .user-chip:hover {
+            color: var(--text);
+            text-decoration: none;
+        }
+
         .avatar {
             width: 1.75rem;
             height: 1.75rem;
@@ -261,6 +266,59 @@
         .empty-state {
             color: var(--text-muted);
         }
+
+        .settings-layout {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .settings-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            flex: 0 0 160px;
+        }
+
+        .settings-nav a {
+            color: var(--text);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .settings-nav a:hover {
+            background: var(--info-bg);
+            text-decoration: none;
+        }
+
+        .settings-nav a.active {
+            background: var(--primary);
+            color: var(--primary-contrast);
+        }
+
+        .settings-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .settings-content .card {
+            max-width: 420px;
+        }
+
+        @media (max-width: 560px) {
+            .settings-layout {
+                flex-direction: column;
+            }
+
+            .settings-nav {
+                flex-direction: row;
+                flex: initial;
+                width: 100%;
+                overflow-x: auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -269,10 +327,10 @@
             <a class="brand" href="{% url 'forum:index' %}">mforum</a>
             <nav>
                 {% if user.is_authenticated %}
-                    <span class="user-chip">
+                    <a class="user-chip" href="{% url 'accounts:settings' %}">
                         <span class="avatar">{{ user.username|first }}</span>
                         {{ user.username }}
-                    </span>
+                    </a>
                     <form method="post" action="{% url 'accounts:logout' %}">
                         {% csrf_token %}
                         <button type="submit" class="btn-ghost">Log out</button>

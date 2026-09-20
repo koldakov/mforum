@@ -1,0 +1,12 @@
+{% extends "accounts/settings_base.html" %}
+
+{% block settings_content %}
+    <div class="card">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {{ form.as_p }}
+            <button type="submit">Change password</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,3 +1,5 @@
+from typing import Any
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
@@ -65,3 +67,81 @@ class LoginForm(forms.Form):
         label=_("Password"),
         widget=forms.PasswordInput,
     )
+
+
+class GeneralSettingsForm(forms.Form):
+    username = forms.CharField(
+        label=_("Username"),
+        max_length=150,
+    )
+    email = forms.EmailField(
+        label=_("Email"),
+    )
+    first_name = forms.CharField(
+        label=_("First name"),
+        max_length=150,
+        required=False,
+    )
+    last_name = forms.CharField(
+        label=_("Last name"),
+        max_length=150,
+        required=False,
+    )
+
+    def __init__(self, *args: Any, user: Any, **kwargs: Any) -> None:
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_username(self) -> str:
+        username = self.cleaned_data["username"]
+        if User.objects.exclude(pk=self.user.pk).filter(username__iexact=username).exists():
+            raise forms.ValidationError(_("A user with that username already exists."))
+        return username
+
+    def clean_email(self) -> str:
+        email = self.cleaned_data["email"]
+        if User.objects.exclude(pk=self.user.pk).filter(email__iexact=email).exists():
+            raise forms.ValidationError(_("A user with that email already exists."))
+        return email
+
+
+class SecuritySettingsForm(forms.Form):
+    current_password = forms.CharField(
+        label=_("Current password"),
+        widget=forms.PasswordInput,
+    )
+    new_password1 = forms.CharField(
+        label=_("New password"),
+        widget=forms.PasswordInput,
+    )
+    new_password2 = forms.CharField(
+        label=_("Confirm new password"),
+        widget=forms.PasswordInput,
+    )
+
+    def __init__(self, *args: Any, user: Any, **kwargs: Any) -> None:
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_current_password(self) -> str:
+        current_password = self.cleaned_data["current_password"]
+        if not self.user.check_password(current_password):
+            raise forms.ValidationError(_("Your current password was entered incorrectly."))
+        return current_password
+
+    def clean_new_password2(self) -> str:
+        password1 = self.cleaned_data.get("new_password1")
+        password2 = self.cleaned_data.get("new_password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(_("Passwords don't match."))
+        return password2
+
+    def clean(self) -> dict:
+        cleaned_data = super().clean()
+        password = cleaned_data.get("new_password2")
+        if password:
+            try:
+                validate_password(password, user=self.user)
+            except forms.ValidationError as exc:
+                self.add_error("new_password2", exc)
+        return cleaned_data

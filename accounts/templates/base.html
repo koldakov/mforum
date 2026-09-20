@@ -298,6 +298,27 @@
             color: var(--primary-contrast);
         }
 
+        .settings-nav form {
+            margin: 0.5rem 0 0;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .settings-nav form button {
+            width: 100%;
+            background: transparent;
+            color: var(--danger);
+            border: none;
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .settings-nav form button:hover {
+            background: var(--danger-bg);
+        }
+
         .settings-content {
             flex: 1;
             min-width: 0;
@@ -331,10 +352,6 @@
                         <span class="avatar">{{ user.username|first }}</span>
                         {{ user.username }}
                     </a>
-                    <form method="post" action="{% url 'accounts:logout' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn-ghost">Log out</button>
-                    </form>
                 {% else %}
                     <a class="btn btn-ghost" href="{% url 'accounts:login' %}">Log in</a>
                     <a class="btn" href="{% url 'accounts:register' %}">Register</a>

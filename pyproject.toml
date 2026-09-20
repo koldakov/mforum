@@ -120,5 +120,6 @@ files = [
     "mforum",
     "manage.py",
     "accounts",
+    "forum",
     "utils",
 ]

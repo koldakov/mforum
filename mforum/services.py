@@ -30,11 +30,11 @@ class BaseService(ABC):
 class BaseRenderService(BaseService, ABC):
     """A service that validates its input through a plain Django Form and renders
     a template or issues a redirect. Views stay thin and just do
-    `SomeService(request, data)()`."""
+    `SomeService(request, data=data)()`."""
 
     form_class: type[forms.BaseForm] | None = None
 
-    def __init__(self, request: HttpRequest, data: dict[str, Any] | None = None) -> None:
+    def __init__(self, request: HttpRequest, /, *, data: dict[str, Any] | None = None) -> None:
         self.request = request
         self.form: forms.BaseForm | None = self.form_class(data) if self.form_class is not None else None
 

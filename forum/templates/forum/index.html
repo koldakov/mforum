@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}mforum{% endblock %}
+
+{% block content %}
+    <h1>Categories</h1>
+    {% if categories %}
+        <ul class="category-list">
+            {% for category in categories %}
+                <li class="category-card">
+                    <h2>{{ category.name }}</h2>
+                    {% if category.description %}
+                        <p>{{ category.description }}</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty-state">No categories yet.</p>
+    {% endif %}
+{% endblock %}

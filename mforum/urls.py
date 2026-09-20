@@ -15,7 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.urls import include, path
+from django.views.generic import RedirectView
 
 from mforum._env_settings import env_settings
 from mforum.admin import admin_site
@@ -24,5 +25,17 @@ urlpatterns = [
     path(
         env_settings.admin_url.get_secret_value(),
         admin_site.urls,
+    ),
+    path(
+        "accounts/",
+        include("accounts.urls"),
+    ),
+    path(
+        "forum/",
+        include("forum.urls"),
+    ),
+    path(
+        "",
+        RedirectView.as_view(pattern_name="forum:index"),
     ),
 ]

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Log in - mforum{% endblock %}
+
+{% block content %}
+    <h1>Log in</h1>
+    <div class="card">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {{ form.as_p }}
+            <button type="submit">Log in</button>
+        </form>
+    </div>
+    <p class="card-footer">Don't have an account? <a href="{% url 'accounts:register' %}">Register</a></p>
+{% endblock %}

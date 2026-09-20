@@ -127,6 +127,10 @@ DATABASES: dict[str, dict[str, Any]] = {
 
 AUTH_USER_MODEL = "accounts.User"
 
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "forum:index"
+LOGOUT_REDIRECT_URL = "forum:index"
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
